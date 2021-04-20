@@ -1,4 +1,4 @@
-let token = "YOUR_TOKEN";
+const token = "YOUR_TOKEN";
 
 function getMe() {
   let response = UrlFetchApp.fetch("https://api.telegram.org/bot" + token + "/getMe");
