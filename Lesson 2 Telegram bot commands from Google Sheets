@@ -1,0 +1,82 @@
+const token = "YOUR_TOKEN";
+const spreadsheetId = "YOUR_SPREADSHEET_ID";
+const webAppUrl = "YOU_WEBAPPURL";
+
+function getMe() {
+  let response = UrlFetchApp.fetch("https://api.telegram.org/bot" + token + "/getMe");
+  console.log(response.getContentText());
+}
+function setWebhook() {
+  let response = UrlFetchApp.fetch("https://api.telegram.org/bot" + token + "/setWebhook?url=" + webAppUrl);
+  console.log(response.getContentText());
+}
+function sendText(chat_id, text) {
+  let data = {
+    method: "post",
+    payload: {
+      method: "sendMessage",
+      chat_id: String(chat_id),
+      text: text,
+      parse_mode: "HTML"
+    }
+  };
+  UrlFetchApp.fetch('https://api.telegram.org/bot' + token + '/', data);
+}
+
+function send() {
+  let chat_id = 1486551874;
+  let text = "Привет! Как дела?";
+  sendText(chat_id, text);
+}
+
+function answerCommand(command) {
+  let sheetCommands = SpreadsheetApp.openById(spreadsheetId).getSheetByName("Commands");
+  let lastRow = sheetCommands.getLastRow();
+  if (lastRow > 1) {
+    let commandsArray = sheetCommands.getRange(2, 3, lastRow - 1).getValues().flat();
+    let commandRow = commandsArray.indexOf(command) + 2;
+    if (commandRow > 1) {
+      let answer = SpreadsheetApp.openById(spreadsheetId).getSheetByName("Commands").getRange(commandRow, 1, 1, 2).getValues();
+      return answer;
+    }
+    else {
+      return false;
+    }
+  }
+  else {
+    return false;
+  }
+}
+
+function tmp() {
+  let command = "/last";
+  let answer = answerCommand(command);
+  console.log(answer);
+  if (answer) {
+    console.log(1);
+  }
+  else {
+    console.log(2);
+  }
+}
+
+function doPost(e) {
+  let contents = JSON.parse(e.postData.contents);
+  let chat_id = contents.message.chat.id;
+  let text = contents.message.text;
+  if (/^\//.exec(text)) {
+    if (text === "/start" || text === "/myid") {
+      sendText(chat_id, `Ваш телеграм ID: ${chat_id}`);
+    }
+    else {
+      let answer = answerCommand(text);
+      if (answer) {
+        sendText(chat_id, `${answer[0][0]}: ${answer[0][1]}`);
+      }
+      else {
+        sendText(chat_id, `Команда ${text} не найдена`);
+      }
+    }
+  }
+  SpreadsheetApp.openById(spreadsheetId).getSheetByName("Messages").appendRow([chat_id, text]);
+}
