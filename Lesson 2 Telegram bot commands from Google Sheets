@@ -25,7 +25,7 @@ function sendText(chat_id, text) {
 }
 
 function send() {
-  let chat_id = 1486551874;
+  let chat_id = "YOUR_ID";
   let text = "Привет! Как дела?";
   sendText(chat_id, text);
 }
