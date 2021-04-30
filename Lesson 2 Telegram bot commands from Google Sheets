@@ -30,6 +30,7 @@ function send() {
   sendText(chat_id, text);
 }
 
+
 function answerCommand(command) {
   let sheetCommands = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Commands");
   let lastRow = sheetCommands.getLastRow();
@@ -37,7 +38,7 @@ function answerCommand(command) {
     let commandsArray = sheetCommands.getRange(2, 3, lastRow - 1).getValues().flat();
     let commandRow = commandsArray.indexOf(command) + 2;
     if (commandRow > 1) {
-      let answer = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Commands").getRange(commandRow, 1, 1, 2).getValues();
+      let answer = sheetCommands.getRange(commandRow, 1, 1, 2).getValues();
       return answer;
     }
     else {
@@ -50,14 +51,13 @@ function answerCommand(command) {
 }
 
 function tmp() {
-  let command = "/last";
+  let command = "/count2";
   let answer = answerCommand(command);
-  console.log(answer);
   if (answer) {
-    console.log(1);
+    console.log(answer)
   }
   else {
-    console.log(2);
+    console.log("false")
   }
 }
 
@@ -65,9 +65,10 @@ function doPost(e) {
   let contents = JSON.parse(e.postData.contents);
   let chat_id = contents.message.chat.id;
   let text = contents.message.text;
-  if (/^\//.exec(text)) {
+  SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Debug").getRange(1, 1).setValue(JSON.stringify(contents, null, 5));
+  if ((/^\//.exec(text))) {
     if (text === "/start" || text === "/myid") {
-      sendText(chat_id, `Ваш телеграм ID: ${chat_id}`);
+      sendText(chat_id, `Ваш телеграм Id: ${chat_id}`);
     }
     else {
       let answer = answerCommand(text);
