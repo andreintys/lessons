@@ -26,7 +26,7 @@ function sendText(chat_id, text) {
 
 function send() {
   let chat_id = YOUR_TLG_ID;
-  let text = "Привет! Как дела?";
+  let text = "Hi! How are you?";
   sendText(chat_id, text);
 }
 
