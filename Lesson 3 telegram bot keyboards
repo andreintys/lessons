@@ -1,0 +1,143 @@
+const token = "YOUR_TOKEN";
+const webAppUrl = "YOUR_WebAppUrl";
+
+function setWebhook() {
+  let response = UrlFetchApp.fetch("https://api.telegram.org/bot" + token + "/setWebhook?url=" + webAppUrl);
+  console.log(response.getContentText());
+}
+
+function sendText(chat_id, text, keyBoard) {
+  let data = {
+    method: "post",
+    payload: {
+      method: "sendMessage",
+      chat_id: String(chat_id),
+      text: text,
+      parse_mode: "HTML",
+      reply_markup: JSON.stringify(keyBoard)
+    }
+  };
+  UrlFetchApp.fetch('https://api.telegram.org/bot' + token + "/", data);
+}
+
+function doPost(e) {
+  let contents = JSON.parse(e.postData.contents);
+  SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Debug").getRange(1, 1).setValue(JSON.stringify(contents, null, 5)); 
+}
+
+function send() {
+  let chat_id = "YOUR_Chat_Id";
+  let text = "Привет!";
+  sendText(chat_id, text, FORCE_REPLY);
+}
+
+let CUSTOM_KEYBOARD = {
+  "keyboard": [
+    [{ "text": "Кнопка 1" }, { "text": "Кнопка 2" }]
+  ]
+};
+
+let CUSTOM_KEYBOARD2 = {
+  "keyboard": [
+    [{ "text": "Кнопка 1" }, { "text": "Кнопка 2" }]
+  ],
+  "resize_keyboard": true
+};
+
+let CUSTOM_KEYBOARD3 = {
+  "keyboard": [
+    [{ "text": "Кнопка 1" }, { "text": "Кнопка 2" }],
+    [{ "text": "Кнопка 3" }, { "text": "Кнопка 4" }]
+  ],
+  "resize_keyboard": true,
+  "one_time_keyboard": true
+};
+
+let CUSTOM_KEYBOARD4 = {
+  "keyboard": [
+    [{ "text": "Кнопка 1" }, { "text": "Кнопка 2" }],
+    [{ "text": "Кнопка 3" }, { "text": "Кнопка 4" }]
+  ],
+  "resize_keyboard": true,
+  "one_time_keyboard": true,
+  "input_field_placeholder": "Текст - подсказка"
+};
+
+let CUSTOM_KEYBOARD5 = {
+  "keyboard": [
+    [{ "text": "Кнопка 1 ❤️" }, { "text": "Кнопка 2 ✨" }],
+    [{ "text": "Кнопка 3 🆗" }, { "text": "Кнопка 4 🔥" }, { "text": "Кнопка 5 ✔️" }],
+    [{ "text": "Кнопка 6 ❤️‍🔥" }, { "text": "Кнопка 7 🏁" }]
+  ],
+  "resize_keyboard": true,
+  "one_time_keyboard": true,
+};
+
+let REMOVE_KEYBOARD = {
+  remove_keyboard: true
+};
+
+let PHONE_No = {
+  "keyboard": [
+    [{ "text": "Отправить номер ☎️️", 'request_contact': true }]
+  ],
+  "resize_keyboard": true,
+  "one_time_keyboard": true
+};
+
+let LOCATION_KEYBOARD = {
+  "keyboard": [
+    [{ "text": "Отправить местоположение 🗺️️", 'request_location': true }]
+  ],
+  "resize_keyboard": true,
+  "one_time_keyboard": true
+};
+
+let POLL_KEYBOARD = {
+  "keyboard": [
+    [{ "text": "Опрос", 'request_poll': {} }]
+  ],
+  "resize_keyboard": true,
+  "one_time_keyboard": true
+};
+
+let POLL_KEYBOARD2 = {
+  "keyboard": [
+    [{ "text": "Опрос", 'request_poll': { type: "quiz" } }]
+  ],
+  "resize_keyboard": true,
+  "one_time_keyboard": true
+};
+
+let POLL_KEYBOARD3 = {
+  "keyboard": [
+    [{ "text": "Опрос", 'request_poll': { type: "regular" } }]
+  ],
+  "resize_keyboard": true,
+  "one_time_keyboard": true
+};
+
+let INLINE = {
+  "inline_keyboard": [
+    [{ "text": "Кнопка 1", 'callback_data': "Кнопка 123" }, { "text": "Кнопка 2", 'callback_data': "Кнопка 2" }],
+    [{ "text": "Кнопка 3", 'callback_data': "Кнопка 3" }, { "text": "Кнопка 4", 'callback_data': "Кнопка 4" }, { "text": "Кнопка 5", 'callback_data': "Кнопка 5" }],
+    [{ "text": "Кнопка 6", 'callback_data': "Кнопка 6" }, { "text": "Кнопка 7", 'callback_data': "Кнопка 7" }]
+  ]
+};
+
+let URL_KEYBOARD = {
+  "inline_keyboard": [
+    [{ "text": "Проверить почту", 'url': "mail.ru" }]
+  ]
+};
+
+let SWITCH_INLINE = {
+  "inline_keyboard": [
+    [{ "text": "Кнопка 1", 'switch_inline_query_current_chat': 'мой текст' }, { "text": "Кнопка 2", 'callback_data': "Кнопка 2" }]
+  ]
+};
+
+let FORCE_REPLY = {
+  "force_reply": true,
+  "input_field_placeholder": "Ваш текст"
+};
