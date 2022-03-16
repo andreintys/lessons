@@ -1,0 +1,119 @@
+function f1() {
+  SpreadsheetApp.getActive().getSheetByName("Лист1").appendRow([1, 1, 1, 1, 1, 1, 1, 1, 1, 1]);
+}
+
+function f2() {
+  SpreadsheetApp.getActive().getSheetByName("Лист1").getRange(SpreadsheetApp.getActive().getSheetByName("Лист1").getLastRow() + 1, 1, 1, 10).setValues([[2, 2, 2, 2, 2, 2, 2, 2, 2, 2]]);
+}
+
+function f3() {
+  let lastRow = SpreadsheetApp.getActive().getSheetByName("Лист1").getLastRow();
+  SpreadsheetApp.getActive().getSheetByName("Лист1").getRange(lastRow + 1, 1).setValue(3);
+  SpreadsheetApp.getActive().getSheetByName("Лист1").getRange(lastRow + 1, 2).setValue(3);
+  SpreadsheetApp.getActive().getSheetByName("Лист1").getRange(lastRow + 1, 3).setValue(3);
+  SpreadsheetApp.getActive().getSheetByName("Лист1").getRange(lastRow + 1, 4).setValue(3);
+  SpreadsheetApp.getActive().getSheetByName("Лист1").getRange(lastRow + 1, 5).setValue(3);
+  SpreadsheetApp.getActive().getSheetByName("Лист1").getRange(lastRow + 1, 6).setValue(3);
+  SpreadsheetApp.getActive().getSheetByName("Лист1").getRange(lastRow + 1, 7).setValue(3);
+  SpreadsheetApp.getActive().getSheetByName("Лист1").getRange(lastRow + 1, 8).setValue(3);
+  SpreadsheetApp.getActive().getSheetByName("Лист1").getRange(lastRow + 1, 9).setValue(3);
+  SpreadsheetApp.getActive().getSheetByName("Лист1").getRange(lastRow + 1, 10).setValue(3);
+}
+
+function f4() {
+  let lastRow = SpreadsheetApp.getActive().getSheetByName("Лист1").getLastRow();
+  let data = SpreadsheetApp.getActive().getSheetByName("Лист1").getRange(lastRow, 1, 1, 10).getValues();
+}
+
+function f5() {
+  let lastRow = SpreadsheetApp.getActive().getSheetByName("Лист1").getLastRow();
+  let data1 = SpreadsheetApp.getActive().getSheetByName("Лист1").getRange(lastRow, 1).getValue();
+  let data2 = SpreadsheetApp.getActive().getSheetByName("Лист1").getRange(lastRow, 2).getValue();
+  let data3 = SpreadsheetApp.getActive().getSheetByName("Лист1").getRange(lastRow, 3).getValue();
+  let data4 = SpreadsheetApp.getActive().getSheetByName("Лист1").getRange(lastRow, 4).getValue();
+  let data5 = SpreadsheetApp.getActive().getSheetByName("Лист1").getRange(lastRow, 5).getValue();
+  let data6 = SpreadsheetApp.getActive().getSheetByName("Лист1").getRange(lastRow, 6).getValue();
+  let data7 = SpreadsheetApp.getActive().getSheetByName("Лист1").getRange(lastRow, 7).getValue();
+  let data8 = SpreadsheetApp.getActive().getSheetByName("Лист1").getRange(lastRow, 8).getValue();
+  let data9 = SpreadsheetApp.getActive().getSheetByName("Лист1").getRange(lastRow, 9).getValue();
+  let data10 = SpreadsheetApp.getActive().getSheetByName("Лист1").getRange(lastRow, 10).getValue();
+}
+
+function bench() {
+  let start = new Date();
+  for (let i = 0; i < 5; i++) {
+    f2();
+  }
+  let finish = new Date();
+  console.log(finish - start + "ms")
+}
+
+function bench2(f) {
+  let start = new Date();
+  for (let i = 0; i < 1000; i++) {
+    f();
+  }
+  return new Date() - start
+}
+
+function bench3() {
+  let timeF1 = 0;
+  let timeF2 = 0;
+
+  for (let j = 0; j < 5; j++) {
+    timeF1 += bench2(f1)
+    timeF2 += bench2(f2)
+  }
+
+  console.log(timeF1 + "ms");
+  console.log(timeF2 + "ms");
+}
+
+function bench4() {
+  let timeF2 = 0;
+  let timeF3 = 0;
+
+  for (let j = 0; j < 5; j++) {
+    timeF2 += bench2(f2)
+    timeF3 += bench2(f3)
+  }
+
+  console.log(timeF2 + "ms");
+  console.log(timeF3 + "ms");
+}
+
+function bench5() {
+  let timeF4 = 0;
+  let timeF5 = 0;
+
+  for (let j = 0; j < 10; j++) {
+    timeF4 += bench2(f4)
+    timeF5 += bench2(f5)
+  }
+
+  console.log(timeF4 + "ms");
+  console.log(timeF5 + "ms");
+}
+
+function bench6() {
+  let timeF4 = 0;
+  let timeF5 = 0;
+
+  function arrayPush() {
+    let array = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+    array.push("push");
+  }
+
+  function arrayUnshift() {
+    let array = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+    array.unshift("unshift");
+  }
+
+  for (let j = 0; j < 10000; j++) {
+    timeF4 += bench2(arrayPush)
+    timeF5 += bench2(arrayUnshift)
+  }
+
+  console.log(timeF4 + "ms");
+  console.log(timeF5 + "ms");
+}
